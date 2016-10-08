@@ -22,14 +22,16 @@ public class TodoManager {
     private final static String FILE_NAME = "TODO_MANAGER_FILE";
 
     private TodoManager() {
-        this.todoLists = new ArrayList<TodoList>();
+        this.todoLists = new ArrayList<>();
     }
 
+//    Returns a instance of this class
     public static TodoManager getInstance() {
         manager = new TodoManager();
         return manager;
     }
 
+//    Reads the content of a manager from a textfile
     public void writeTodos(Context context) {
         FileOutputStream fileOutputStream;
 
@@ -48,6 +50,7 @@ public class TodoManager {
         }
     }
 
+//    Writes the content of the manager to a textfile
     public void readTodos(Context context) {
         manager = TodoManager.getInstance();
 
@@ -73,11 +76,13 @@ public class TodoManager {
         }
     }
 
+//    Adds an new TodoList to the TodoManager
     public void addTodoList(String title) {
         TodoList todoList = new TodoList(title);
         todoLists.add(todoList);
     }
 
+//    Get an array containing the titles of the TodoLists
     public String[] getTitleArray() {
         int numTitles = todoLists.size();
         String[] titles = new String[numTitles];
@@ -86,5 +91,16 @@ public class TodoManager {
             titles[i] = todoLists.get(i).getTitle();
         }
         return titles;
+    }
+
+//    Get the TodoItems of a particular TodoList
+    public ArrayList<TodoItem> getTodos (String title) {
+        TodoList todoList = null;
+        for (TodoList list : todoLists) {
+            if (list.getTitle().equals(title)) {
+                todoList = list;
+            }
+        }
+        return todoList.getTodoItems();
     }
 }

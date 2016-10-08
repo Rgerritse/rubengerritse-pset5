@@ -4,15 +4,18 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends FragmentActivity implements TodoListFragment.ListClicked{
     private TodoManager todoManager;
     private FragmentManager fragmentManager;
     private TodoListFragment todoListFragment;
+    private TodoItemFragment todoItemFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +27,10 @@ public class MainActivity extends FragmentActivity {
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         todoListFragment = new TodoListFragment();
-        fragmentTransaction.add(R.id.fragment_fl, todoListFragment);
+        todoItemFragment = new TodoItemFragment();
+        fragmentTransaction.add(R.id.list_fragment_fl, todoListFragment);
+        fragmentTransaction.add(R.id.item_fragment_fl, todoItemFragment);
         fragmentTransaction.commit();
-    }
-
-    public void openAddListActivity(View view) {
-        todoManager.writeTodos(this);
-        Intent intent = new Intent(this, AddListActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -41,5 +40,23 @@ public class MainActivity extends FragmentActivity {
         String[] titles = todoManager.getTitleArray();
         todoListFragment.setTodoListTitles(titles);
         todoListFragment.updateListView();
+    }
+
+    
+    @Override
+    public void openTodoItemFragment(String title){
+        ArrayList<TodoItem> todoItems = todoManager.getTodos(title);
+        FrameLayout listFrame = (FrameLayout) findViewById(R.id.list_fragment_fl);
+        FrameLayout itemFrame = (FrameLayout) findViewById(R.id.item_fragment_fl);
+        listFrame.setVisibility(View.GONE);
+        itemFrame.setVisibility(View.VISIBLE);
+        todoItemFragment.updateListView(todoItems);
+    }
+
+//    Opens the Activity to add a new list
+    public void openAddListActivity(View view) {
+        todoManager.writeTodos(this);
+        Intent intent = new Intent(this, AddListActivity.class);
+        startActivity(intent);
     }
 }
