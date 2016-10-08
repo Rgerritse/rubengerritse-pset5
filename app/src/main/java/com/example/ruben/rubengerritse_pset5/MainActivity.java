@@ -68,6 +68,13 @@ public class MainActivity extends FragmentActivity implements ListFragment.ListC
     }
 
     @Override
+    public void switchCompleted(int position) {
+        manager.switchCompleted(position, selectedList);
+        ArrayList<TodoItem> todoItems = manager.getTodos(selectedList);
+        itemFragment.updateListView(todoItems);
+    }
+
+    @Override
     public void removeList(int position) {
         manager.removeList(position);
         String[] listTitles = manager.getListTitles();

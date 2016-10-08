@@ -55,6 +55,11 @@ public class TodoManager {
         lists.get(selectedList).removeItem(position);
     }
 
+    public void switchCompleted(int position, int selectedList) {
+        lists.get(selectedList).getTodoItems().get(position).switchCompleted();;
+    }
+
+
     public void writeTodos(Context context) {
         FileOutputStream outputStream;
 
