@@ -1,31 +1,31 @@
 package com.example.ruben.rubengerritse_pset5;
 
 /**
- * Created by ruben on 5-10-16.
+ * Created by ruben on 8-10-16.
  */
 
 public class TodoItem {
     private String title;
     private boolean completed;
 
-//
+    //    Constructor
     public TodoItem(String title){
         this.title = title;
         completed = false;
     }
 
-//    Returns the title of the ToDoItem
+    //    Returns the title of the TodoItem
     public String getTitle(){
         return this.title;
     }
 
-//    Returns the completed status of the ToDoItem
+    //    Returns the completed status of the TodoItem
     public boolean getCompleted(){
         return this.completed;
     }
 
-//    Set the completed status of the ToDoItem
-    public void setCompleted(boolean status){
-        this.completed = status;
+    //    Sets the completed status of the TodoItem
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }
