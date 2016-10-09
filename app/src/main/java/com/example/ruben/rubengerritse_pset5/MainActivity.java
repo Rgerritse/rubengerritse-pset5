@@ -27,6 +27,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.ListC
     private FrameLayout listFrame;
     private FrameLayout itemFrame;
     private FrameLayout addListFrame;
+    private int openFragment;
     private int selectedList;
 
     @Override
@@ -34,6 +35,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.ListC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        openFragment = 0;
         selectedList = -1;
         manager = TodoManager.getInstance();
 
@@ -59,9 +61,11 @@ public class MainActivity extends FragmentActivity implements ListFragment.ListC
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listFrame.setVisibility(View.VISIBLE);
             itemFrame.setVisibility(View.GONE);
+            findViewById(R.id.to_lists_b).setVisibility(View.VISIBLE);
         } else {
             listFrame.setVisibility(View.GONE);
             itemFrame.setVisibility(View.VISIBLE);
+            findViewById(R.id.to_lists_b).setVisibility(View.GONE);
         }
         manager.readTodos(this);
         String[] listTitles = manager.getListTitles();
@@ -77,23 +81,35 @@ public class MainActivity extends FragmentActivity implements ListFragment.ListC
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        FrameLayout listFrame = (FrameLayout) findViewById(R.id.list_fragment_fl);
-        FrameLayout itemFrame = (FrameLayout) findViewById(R.id.item_fragment_fl);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if(selectedList == -1) {
+            findViewById(R.id.to_lists_b).setVisibility(View.INVISIBLE);
+            if (openFragment == 0) {
                 listFrame.setVisibility(View.VISIBLE);
                 itemFrame.setVisibility(View.INVISIBLE);
-            } else {
+                addListFrame.setVisibility(View.GONE);
+            } else if (openFragment == 1) {
                 listFrame.setVisibility(View.VISIBLE);
                 itemFrame.setVisibility(View.VISIBLE);
-            }
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            if(selectedList == -1) {
-                listFrame.setVisibility(View.VISIBLE);
-                itemFrame.setVisibility(View.GONE);
+                addListFrame.setVisibility(View.GONE);
             } else {
                 listFrame.setVisibility(View.GONE);
+                itemFrame.setVisibility(View.GONE);
+                addListFrame.setVisibility(View.VISIBLE);
+            }
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            findViewById(R.id.to_lists_b).setVisibility(View.VISIBLE);
+            if (openFragment == 0) {
+                listFrame.setVisibility(View.VISIBLE);
+                itemFrame.setVisibility(View.GONE);
+                addListFrame.setVisibility(View.GONE);
+            } else if (openFragment == 1) {
+                listFrame.setVisibility(View.GONE);
                 itemFrame.setVisibility(View.VISIBLE);
+                addListFrame.setVisibility(View.GONE);
+            } else {
+                listFrame.setVisibility(View.GONE);
+                itemFrame.setVisibility(View.GONE);
+                addListFrame.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -101,14 +117,14 @@ public class MainActivity extends FragmentActivity implements ListFragment.ListC
     @Override
     public void openItemFragment(int position){
         selectedList = position;
+        openFragment = 1;
         ArrayList<TodoItem> todoItems = manager.getTodos(selectedList);
         int orientation = getResources().getConfiguration().orientation;
+        itemFrame.setVisibility(View.VISIBLE);
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listFrame.setVisibility(View.GONE);
-            itemFrame.setVisibility(View.VISIBLE);
         } else {
             listFrame.setVisibility(View.VISIBLE);
-            itemFrame.setVisibility(View.VISIBLE);
         }
         itemFragment.updateListView(todoItems);
     }
@@ -133,12 +149,14 @@ public class MainActivity extends FragmentActivity implements ListFragment.ListC
         String[] listTitles = manager.getListTitles();
         listFragment.updateListView(listTitles);
         if (position == selectedList) {
+            openFragment = 0;
             selectedList = -1;
             itemFrame.setVisibility(View.INVISIBLE);
         }
     }
 
     public void openAddListFragment(View view) {
+        openFragment = 2;
         listFrame.setVisibility(View.GONE);
         itemFrame.setVisibility(View.GONE);
         addListFrame.setVisibility(View.VISIBLE);
@@ -155,10 +173,11 @@ public class MainActivity extends FragmentActivity implements ListFragment.ListC
     }
 
     public void addTodoList(View view) {
+        openFragment = 1;
+
         EditText titleET = (EditText) findViewById(R.id.title_et);
         String title = titleET.getText().toString();
         manager.addList(title);
-
 
         selectedList = manager.getNumberOfLists() - 1;
         ArrayList<TodoItem> todoItems = manager.getTodos(selectedList);
@@ -168,13 +187,19 @@ public class MainActivity extends FragmentActivity implements ListFragment.ListC
         listFragment.updateListView(listTitles);
 
         addListFrame.setVisibility(View.GONE);
+        itemFrame.setVisibility(View.VISIBLE);
+
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listFrame.setVisibility(View.GONE);
-            itemFrame.setVisibility(View.VISIBLE);
         } else {
             listFrame.setVisibility(View.VISIBLE);
-            itemFrame.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void toLists(View view) {
+        openFragment = 0;
+        listFrame.setVisibility(View.VISIBLE);
+        itemFrame.setVisibility(View.GONE);
     }
 }
