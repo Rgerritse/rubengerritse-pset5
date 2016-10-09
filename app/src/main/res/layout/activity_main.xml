@@ -14,10 +14,18 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/list_fragment_fl"/>
+        android:id="@+id/list_fragment_fl"
+        android:layout_weight="2"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/item_fragment_fl"/>
+        android:id="@+id/item_fragment_fl"
+        android:layout_weight="1"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/add_list_fragment_fl"
+        android:visibility="gone"/>
 </LinearLayout>

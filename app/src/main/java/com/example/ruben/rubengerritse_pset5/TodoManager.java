@@ -135,4 +135,8 @@ public class TodoManager {
     public ArrayList<TodoItem> getTodos (int position) {
         return lists.get(position).getTodoItems();
     }
+
+    public int getNumberOfLists() {
+        return lists.size();
+    }
 }
