@@ -2,6 +2,7 @@ package com.example.ruben.rubengerritse_pset5;
 
 /**
  * Created by ruben on 8-10-16.
+ * This class describes a TodoItem object, which contains a title and a completed status.
  */
 
 public class TodoItem {

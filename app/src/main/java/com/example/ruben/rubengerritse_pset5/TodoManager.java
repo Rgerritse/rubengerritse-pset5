@@ -10,11 +10,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by ruben on 8-10-16.
+ * This class describes a TodoManager object, which contains an ArrayList of TodoLists.
+ * It handles all interaction towards TodoLists and TodoItems.
  */
 
 public class TodoManager {
@@ -30,36 +31,42 @@ public class TodoManager {
         this.lists = new ArrayList<>();
     }
 
-    //    Returns a instance of this class
+//    Returns a instance of this class
     public static TodoManager getInstance() {
         manager = new TodoManager();
         return manager;
     }
 
+//    Adds a TodoList
     public void addList(String listTitle) {
         TodoList list = new TodoList(listTitle);
         lists.add(list);
     }
 
+//    Removes a TodoList
     public void removeList(int position) {
         lists.remove(position);
     }
 
+//    Adds a TodoItem to a List
     public void addItem(Context context, String itemTitle, int position) {
         TodoItem item = new TodoItem(itemTitle);
         lists.get(position).addTodoItem(item);
         writeTodos(context);
     }
 
+//    Removes a TodoItem from a TodoList
     public void removeItem(int position, int selectedList) {
         lists.get(selectedList).removeItem(position);
     }
 
+//    Switches the completed boolean from an TodoItem
     public void switchCompleted(int position, int selectedList) {
         lists.get(selectedList).getTodoItems().get(position).switchCompleted();;
     }
 
 
+//    Writes the TodoLists and TodoItems to the internal storage
     public void writeTodos(Context context) {
         FileOutputStream outputStream;
 
@@ -86,6 +93,7 @@ public class TodoManager {
         }
     }
 
+//    Reads the TodoLists and TodoItems from the internal storage
     public void readTodos(Context context) {
         manager = TodoManager.getInstance();
         FileInputStream inputStream;
@@ -122,6 +130,7 @@ public class TodoManager {
         }
     }
 
+//    Return an array containing all titles of lists
     public String[] getListTitles() {
         int numTitles = lists.size();
         String[] titles = new String[numTitles];
@@ -132,11 +141,18 @@ public class TodoManager {
         return titles;
     }
 
+//    Returns the TodoItems given a TodoList
     public ArrayList<TodoItem> getTodos (int position) {
         return lists.get(position).getTodoItems();
     }
 
+//    Returns the number of lists
     public int getNumberOfLists() {
         return lists.size();
+    }
+
+//    Returns the title of a Todolist
+    public String getListTitle(int position) {
+        return lists.get(position).getTitle();
     }
 }

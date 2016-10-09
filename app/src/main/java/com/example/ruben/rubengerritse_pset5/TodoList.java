@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Created by ruben on 8-10-16.
+ * This class describes a TodoList object, which contains an ArrayList of TodoItems.
+ * This class handles the interaction towards its underlying TodoItems.
  */
 
 public class TodoList {
